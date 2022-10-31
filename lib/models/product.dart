@@ -12,4 +12,11 @@ class Product {
       'uom': uom,
     };
   }
+
+  @override
+  String toString() {
+    return uom != null
+        ? 'Product{$description, UOM: $uom}'
+        : 'Product{$description}';
+  }
 }

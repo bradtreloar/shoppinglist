@@ -49,4 +49,17 @@ void main() {
       'uom': null,
     });
   });
+
+  test('Product has string representation', () {
+    final description = randomDescription();
+    final quantity = randomQuantity(1, 10);
+    final uom = randomUom();
+
+    final product1 =
+        Product(description: description, quantity: quantity, uom: uom);
+    final product2 = Product(description: description, quantity: quantity);
+
+    expect(product1.toString(), 'Product{$description, UOM: $uom}');
+    expect(product2.toString(), 'Product{$description}');
+  });
 }
