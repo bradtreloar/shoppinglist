@@ -3,25 +3,6 @@ import '../fakes.dart';
 import 'package:shopping_list/models/product.dart';
 
 void main() {
-  test('Product has required description', () {
-    final description = randomDescription();
-
-    final product = Product(description: description);
-
-    expect(product.description, description);
-  });
-
-  test('Product has optional unit of measure', () {
-    final description = randomDescription();
-    final uom = randomUom();
-
-    final product1 = Product(description: description, uom: uom);
-    final product2 = Product(description: description);
-
-    expect(product1.uom, uom);
-    expect(product2.uom, null);
-  });
-
   test('Product converts to Map', () {
     final description = randomDescription();
     final uom = randomUom();
