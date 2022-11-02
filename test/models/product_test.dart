@@ -42,4 +42,18 @@ void main() {
     expect(product2.toString(), 'Product{$description}');
     expect(product3.toString(), 'Product{$description}');
   });
+
+  test('creates Product from map', () {
+    final map = {
+      'id': randomId(),
+      'description': randomDescription(),
+      'uom': randomUom(),
+    };
+
+    final product = Product.fromMap(map);
+
+    expect(product.id, map['id']);
+    expect(product.description, map['description']);
+    expect(product.uom, map['uom']);
+  });
 }
