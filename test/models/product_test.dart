@@ -38,9 +38,9 @@ void main() {
     final product2 = Product(id: id, description: description);
     final product3 = Product(description: description);
 
-    expect(product1.toString(), 'Product{$description, UOM: $uom}');
-    expect(product2.toString(), 'Product{$description}');
-    expect(product3.toString(), 'Product{$description}');
+    expect(product1.toString(), 'Product{$id: $description, UOM: $uom}');
+    expect(product2.toString(), 'Product{$id: $description}');
+    expect(product3.toString(), 'Product{null: $description}');
   });
 
   test('creates Product from map', () {

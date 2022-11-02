@@ -21,7 +21,7 @@ class Product {
   @override
   String toString() {
     return uom != null
-        ? 'Product{$description, UOM: $uom}'
-        : 'Product{$description}';
+        ? 'Product{$id: $description, UOM: $uom}'
+        : 'Product{$id: $description}';
   }
 }
