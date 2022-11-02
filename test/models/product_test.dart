@@ -56,4 +56,11 @@ void main() {
     expect(product.description, map['description']);
     expect(product.uom, map['uom']);
   });
+
+  test('detects is equal or not equal with another Product', () {
+    final product1 = fakeProduct();
+    final product2 = Product.fromMap(product1.toMap());
+
+    expect(product1, product2);
+  });
 }

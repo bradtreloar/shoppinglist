@@ -24,4 +24,16 @@ class Product {
         ? 'Product{$id: $description, UOM: $uom}'
         : 'Product{$id: $description}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Product &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          description == other.description &&
+          uom == other.uom;
+
+  @override
+  int get hashCode => id.hashCode ^ description.hashCode ^ uom.hashCode;
 }
