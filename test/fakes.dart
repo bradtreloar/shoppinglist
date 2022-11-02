@@ -11,6 +11,7 @@ String randomUom() => faker.lorem.word();
 int randomQuantity(int min, int max) => min + Random().nextInt(max);
 
 Product fakeProduct() => Product(
+      id: randomId(),
       description: randomDescription(),
       uom: randomUom(),
     );
