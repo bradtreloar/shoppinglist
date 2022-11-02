@@ -1,16 +1,7 @@
-# shopping_list
+# Shopping list app
 
-A new Flutter project.
+Create shopping checklists from a list of meals.
 
-## Getting Started
+This will be very simple: no energy/macronutrients trackers, no budgeting. Just a quick way to create shopping checklists for people who cook more or less the same stuff from week-to-week.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Initially this app will be made just for Android phones.
