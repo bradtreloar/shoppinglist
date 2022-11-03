@@ -88,4 +88,31 @@ Future main() async {
       }),
     ]);
   });
+
+  test('fetches product by ID', () async {
+    final database = await inMemoryDatabase();
+    final productAttributes = {
+      'description': randomDescription(),
+      'uom': randomUom(),
+    };
+    final productRepo = ProductRepository(database: database);
+
+    await database.insert('products', productAttributes);
+    final result1 = await productRepo.getById(1);
+    await database.insert('products', productAttributes);
+    final result2 = await productRepo.getById(2);
+
+    expect(
+        result1,
+        Product.fromMap({
+          'id': 1,
+          ...productAttributes,
+        }));
+    expect(
+        result2,
+        Product.fromMap({
+          'id': 2,
+          ...productAttributes,
+        }));
+  });
 }

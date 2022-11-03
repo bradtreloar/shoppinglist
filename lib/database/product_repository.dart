@@ -25,4 +25,9 @@ class ProductRepository {
     final results = await database.query(tableName);
     return results.map((row) => Product.fromMap(row));
   }
+
+  Future<Product> getById(int id) async {
+    final results = await database.query(tableName, where: 'id = $id');
+    return Product.fromMap(results.first);
+  }
 }
