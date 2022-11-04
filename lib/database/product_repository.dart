@@ -1,5 +1,7 @@
+import 'package:shopping_list/database/exceptions.dart';
 import 'package:shopping_list/models/product.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common/src/exception.dart';
 
 class ProductRepository {
   static const tableName = 'products';
@@ -18,7 +20,17 @@ class ProductRepository {
   }
 
   Future insert(Product product) async {
-    await database.insert(tableName, product.toMap());
+    try {
+      await database.insert(tableName, product.toMap());
+    } on SqfliteDatabaseException {
+      if (product.id != null) {
+        final id = product.id as int;
+        final existingProduct = await getById(id);
+        if (existingProduct != null) {
+          throw DuplicateIdException('Product', id);
+        }
+      }
+    }
   }
 
   Future<Iterable<Product>> getAll() async {
@@ -26,8 +38,8 @@ class ProductRepository {
     return results.map((row) => Product.fromMap(row));
   }
 
-  Future<Product> getById(int id) async {
+  Future<Product?> getById(int id) async {
     final results = await database.query(tableName, where: 'id = $id');
-    return Product.fromMap(results.first);
+    return results.isNotEmpty ? Product.fromMap(results.first) : null;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shopping_list/database/exceptions.dart';
 import 'package:shopping_list/models/product.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
@@ -66,6 +67,21 @@ Future main() async {
         'id': 2,
       }
     ]);
+  });
+
+  test('throws exception when inserting product with duplicate ID', () async {
+    final database = await inMemoryDatabase();
+    final product = Product(id: 1, description: randomDescription());
+    final productRepo = ProductRepository(database: database);
+
+    await productRepo.insert(product);
+
+    try {
+      await productRepo.insert(product);
+      fail("DuplicateIdException not thrown");
+    } catch (e) {
+      expect(e, isInstanceOf<DuplicateIdException>());
+    }
   });
 
   test('fetches products from database', () async {
