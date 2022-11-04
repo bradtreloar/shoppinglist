@@ -140,4 +140,18 @@ Future main() async {
 
     expect(result, null);
   });
+
+  test('updates product attributes', () async {
+    final database = await inMemoryDatabase();
+    const id = 1;
+    final product = fakeProduct(id: id);
+    final updatedProduct = fakeProduct(id: id);
+    await database.insert('products', product.toMap());
+    final productRepo = ProductRepository(database: database);
+
+    await productRepo.update(updatedProduct);
+    final result = await productRepo.getById(id);
+
+    expect(result, updatedProduct);
+  });
 }
