@@ -7,8 +7,8 @@ import '../fakes.dart';
 import 'package:shopping_list/database/product_repository.dart';
 
 Future<Database> inMemoryDatabase() async {
-  return await openDatabase(inMemoryDatabasePath, version: 1,
-      onCreate: (database, version) async {
+  return await openDatabase(inMemoryDatabasePath,
+      version: 1, singleInstance: false, onCreate: (database, version) async {
     await database.execute('''
       CREATE TABLE products (
         id INTEGER PRIMARY KEY,
