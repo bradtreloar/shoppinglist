@@ -154,4 +154,26 @@ Future main() async {
 
     expect(result, updatedProduct);
   });
+
+  test('throws exception when updating nonexistent product', () async {
+    final database = await inMemoryDatabase();
+    const id = 1;
+    final product1 = fakeProduct(id: id);
+    final product2 = Product(description: randomDescription());
+    final productRepo = ProductRepository(database: database);
+
+    try {
+      await productRepo.update(product1);
+      fail("IdNotFoundException not thrown");
+    } catch (e) {
+      expect(e, isInstanceOf<IdNotFoundException>());
+    }
+
+    try {
+      await productRepo.update(product2);
+      fail("NullIdException not thrown");
+    } catch (e) {
+      expect(e, isInstanceOf<NullIdException>());
+    }
+  });
 }

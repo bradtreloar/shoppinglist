@@ -43,6 +43,16 @@ class ProductRepository {
   }
 
   Future update(Product product) async {
+    if (product.id == null) {
+      throw const NullIdException('Product');
+    }
+
+    final results =
+        await database.query(tableName, where: 'id = ${product.id}');
+    if (results.isEmpty) {
+      throw IdNotFoundException('Product', product.id as int);
+    }
+
     await database.update(tableName, product.toMap(),
         where: 'id = ${product.id}');
   }
