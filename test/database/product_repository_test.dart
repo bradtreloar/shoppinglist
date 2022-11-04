@@ -131,4 +131,13 @@ Future main() async {
           ...productAttributes,
         }));
   });
+
+  test('returns null when product does not exist', () async {
+    final database = await inMemoryDatabase();
+    final productRepo = ProductRepository(database: database);
+
+    final result = await productRepo.getById(1);
+
+    expect(result, null);
+  });
 }
