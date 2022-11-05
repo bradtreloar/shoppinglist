@@ -3,6 +3,8 @@ abstract class Model {
 
   Model({required this.id});
 
+  Model.fromMap(Map<String, dynamic> map) : id = map['id'];
+
   Map<String, dynamic> toMap();
 
   @override

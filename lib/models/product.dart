@@ -6,10 +6,10 @@ class Product extends Model {
 
   Product({required id, required this.description, this.uom}) : super(id: id);
 
-  static Product fromMap(Map<String, dynamic> map) {
-    return Product(
-        id: map['id'], description: map['description'], uom: map['uom']);
-  }
+  Product.fromMap(Map<String, dynamic> map)
+      : description = map['description'],
+        uom = map['uom'],
+        super(id: map['id']);
 
   @override
   Map<String, dynamic> toMap() {
