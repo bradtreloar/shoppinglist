@@ -10,8 +10,12 @@ String randomUom() => faker.lorem.word();
 
 int randomQuantity(int min, int max) => min + Random().nextInt(max);
 
-Product fakeProduct({int? id}) => Product(
-      id: id ?? randomId(),
-      description: randomDescription(),
-      uom: randomUom(),
-    );
+Product fakeProduct({int? id}) => Product.fromMap({
+      'id': id ?? randomId(),
+      ...fakeProductAttributes(),
+    });
+
+Map<String, dynamic> fakeProductAttributes() => {
+      'description': randomDescription(),
+      'uom': randomUom(),
+    };

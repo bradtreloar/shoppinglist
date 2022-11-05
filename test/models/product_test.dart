@@ -10,7 +10,6 @@ void main() {
 
     final product1 = Product(id: id, description: description, uom: uom);
     final product2 = Product(id: id, description: description);
-    final product3 = Product(description: description);
 
     expect(product1.toMap(), {
       'id': id,
@@ -19,11 +18,6 @@ void main() {
     });
     expect(product2.toMap(), {
       'id': id,
-      'description': description,
-      'uom': null,
-    });
-    expect(product3.toMap(), {
-      'id': null,
       'description': description,
       'uom': null,
     });
@@ -36,11 +30,9 @@ void main() {
 
     final product1 = Product(id: id, description: description, uom: uom);
     final product2 = Product(id: id, description: description);
-    final product3 = Product(description: description);
 
     expect(product1.toString(), 'Product{$id: $description, UOM: $uom}');
     expect(product2.toString(), 'Product{$id: $description}');
-    expect(product3.toString(), 'Product{null: $description}');
   });
 
   test('creates Product from map', () {

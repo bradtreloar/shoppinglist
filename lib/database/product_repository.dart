@@ -28,29 +28,15 @@ class ProductRepository {
     return results.isNotEmpty ? Product.fromMap(results.first) : null;
   }
 
-  Future insert(Product product) async {
-    try {
-      await database.insert(tableName, product.toMap());
-    } on Exception {
-      if (product.id != null) {
-        final id = product.id as int;
-        final existingProduct = await getById(id);
-        if (existingProduct != null) {
-          throw DuplicateIdException('Product', id);
-        }
-      }
-    }
+  Future insert(Map<String, dynamic> attributes) async {
+    await database.insert(tableName, attributes);
   }
 
   Future update(Product product) async {
-    if (product.id == null) {
-      throw const NullIdException('Product');
-    }
-
     final results =
         await database.query(tableName, where: 'id = ${product.id}');
     if (results.isEmpty) {
-      throw IdNotFoundException('Product', product.id as int);
+      throw IdNotFoundException('Product', product.id);
     }
 
     await database.update(tableName, product.toMap(),

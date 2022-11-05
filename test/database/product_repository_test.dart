@@ -37,51 +37,35 @@ Future main() async {
     expect(result.map((col) => col['name']), ['id', 'description', 'uom']);
   });
 
-  test('inserts Product into database', () async {
+  test('inserts new Product into database', () async {
     final database = await inMemoryDatabase();
-    final product1 = Product(description: randomDescription());
-    final product2 =
-        Product(description: randomDescription(), uom: randomUom());
+    final productAttributes1 = fakeProductAttributes();
+    final productAttributes2 = fakeProductAttributes();
     final productRepo = ProductRepository(database: database);
 
     final result0 = await database.query(ProductRepository.tableName);
-    await productRepo.insert(product1);
+    await productRepo.insert(productAttributes1);
     final result1 = await database.query(ProductRepository.tableName);
-    await productRepo.insert(product2);
+    await productRepo.insert(productAttributes2);
     final result2 = await database.query(ProductRepository.tableName);
 
     expect(result0, []);
     expect(result1, [
       {
-        ...product1.toMap(),
         'id': 1,
+        ...productAttributes1,
       }
     ]);
     expect(result2, [
       {
-        ...product1.toMap(),
         'id': 1,
+        ...productAttributes1,
       },
       {
-        ...product2.toMap(),
         'id': 2,
+        ...productAttributes2,
       }
     ]);
-  });
-
-  test('throws exception when inserting product with duplicate ID', () async {
-    final database = await inMemoryDatabase();
-    final product = Product(id: 1, description: randomDescription());
-    final productRepo = ProductRepository(database: database);
-
-    await productRepo.insert(product);
-
-    try {
-      await productRepo.insert(product);
-      fail("DuplicateIdException not thrown");
-    } catch (e) {
-      expect(e, isInstanceOf<DuplicateIdException>());
-    }
   });
 
   test('fetches products from database', () async {
@@ -157,9 +141,7 @@ Future main() async {
 
   test('throws exception when updating nonexistent product', () async {
     final database = await inMemoryDatabase();
-    const id = 1;
-    final product1 = fakeProduct(id: id);
-    final product2 = Product(description: randomDescription());
+    final product1 = fakeProduct();
     final productRepo = ProductRepository(database: database);
 
     try {
@@ -167,13 +149,6 @@ Future main() async {
       fail("IdNotFoundException not thrown");
     } catch (e) {
       expect(e, isInstanceOf<IdNotFoundException>());
-    }
-
-    try {
-      await productRepo.update(product2);
-      fail("NullIdException not thrown");
-    } catch (e) {
-      expect(e, isInstanceOf<NullIdException>());
     }
   });
 
@@ -183,7 +158,7 @@ Future main() async {
     await database.insert('products', product.toMap());
     final productRepo = ProductRepository(database: database);
 
-    await productRepo.delete(product.id as int);
+    await productRepo.delete(product.id);
 
     final result = await database.query(ProductRepository.tableName);
     expect(result, []);

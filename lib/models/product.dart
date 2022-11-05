@@ -1,15 +1,17 @@
-class Product {
-  final int? id;
+import 'package:shopping_list/models/model.dart';
+
+class Product extends Model {
   final String description;
   final String? uom;
 
-  Product({this.id, required this.description, this.uom});
+  Product({required id, required this.description, this.uom}) : super(id: id);
 
   static Product fromMap(Map<String, dynamic> map) {
     return Product(
         id: map['id'], description: map['description'], uom: map['uom']);
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -21,19 +23,7 @@ class Product {
   @override
   String toString() {
     return uom != null
-        ? 'Product{$id: $description, UOM: $uom}'
-        : 'Product{$id: $description}';
+        ? '$runtimeType{$id: $description, UOM: $uom}'
+        : '$runtimeType{$id: $description}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Product &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          description == other.description &&
-          uom == other.uom;
-
-  @override
-  int get hashCode => id.hashCode ^ description.hashCode ^ uom.hashCode;
 }
