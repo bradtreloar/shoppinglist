@@ -1,4 +1,3 @@
-import 'package:shopping_list/models/model.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class Repository {
