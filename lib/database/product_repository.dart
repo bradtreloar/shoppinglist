@@ -17,7 +17,7 @@ class ProductRepository extends Repository {
         {
           'name': 'uom',
           'type': 'TEXT',
-          'primaryKey': true,
+          'nullable': true,
         },
       ];
 
