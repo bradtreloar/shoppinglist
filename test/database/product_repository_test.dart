@@ -43,13 +43,12 @@ Future main() async {
     final productAttributes2 = fakeProductAttributes();
     final productRepo = ProductRepository(database: database);
 
-    final result0 = await database.query(ProductRepository.tableName);
     await productRepo.insert(productAttributes1);
     final result1 = await database.query(ProductRepository.tableName);
+
     await productRepo.insert(productAttributes2);
     final result2 = await database.query(ProductRepository.tableName);
 
-    expect(result0, []);
     expect(result1, [
       {
         'id': 1,
@@ -66,6 +65,20 @@ Future main() async {
         ...productAttributes2,
       }
     ]);
+  });
+
+  test('hydrates database with Products', () async {
+    final database = await inMemoryDatabase();
+    final products = [
+      fakeProduct(id: 1),
+      fakeProduct(id: 2),
+    ];
+    final productRepo = ProductRepository(database: database);
+
+    await productRepo.hydrate(products);
+
+    final result = await database.query(ProductRepository.tableName);
+    expect(result, products.map((product) => product.toMap()));
   });
 
   test('fetches products from database', () async {

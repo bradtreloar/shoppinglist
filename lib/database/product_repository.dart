@@ -5,15 +5,29 @@ import 'package:sqflite/sqflite.dart';
 class ProductRepository {
   static const tableName = 'products';
   final Database database;
+  static const columns = [
+    {
+      'name': 'description',
+      'type': 'TEXT',
+    },
+    {
+      'name': 'uom',
+      'type': 'TEXT',
+      'primaryKey': true,
+    },
+  ];
 
   ProductRepository({required this.database});
 
   Future createTable() async {
     await database.execute('''
-        CREATE TABLE products (
+        CREATE TABLE $tableName (
           id INTEGER PRIMARY KEY,
-          description TEXT,
-          uom TEXT
+          ${columns.map((column) => '''
+            ${column['name']}
+            ${column['type']}
+            ${column['nullable'] == true ? "NULL" : "NOT NULL"}
+          ''').join(',')}
         )
       ''');
   }
@@ -30,6 +44,13 @@ class ProductRepository {
 
   Future insert(Map<String, dynamic> attributes) async {
     await database.insert(tableName, attributes);
+  }
+
+  Future hydrate(List<Product> products) async {
+    final values = products.map((product) =>
+        "(${intValue(product.id)}, ${textValue(product.description)}, ${textValue(product.uom)})");
+    await database.rawInsert(
+        'INSERT INTO $tableName(id, description, uom) VALUES${values.join(",")}');
   }
 
   Future update(Product product) async {
@@ -51,4 +72,8 @@ class ProductRepository {
 
     await database.delete(tableName, where: 'id = $id');
   }
+
+  String intValue(int? value) => value != null ? "$value" : 'null';
+
+  String textValue(String? value) => value != null ? "'$value'" : 'null';
 }
