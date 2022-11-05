@@ -1,36 +1,25 @@
 import 'package:shopping_list/database/exceptions.dart';
+import 'package:shopping_list/database/repository.dart';
 import 'package:shopping_list/models/product.dart';
-import 'package:sqflite/sqflite.dart';
 
-class ProductRepository {
-  static const tableName = 'products';
-  final Database database;
-  static const columns = [
-    {
-      'name': 'description',
-      'type': 'TEXT',
-    },
-    {
-      'name': 'uom',
-      'type': 'TEXT',
-      'primaryKey': true,
-    },
-  ];
+class ProductRepository extends Repository {
+  ProductRepository({required database}) : super(database: database);
 
-  ProductRepository({required this.database});
+  @override
+  String get tableName => 'products';
 
-  Future createTable() async {
-    await database.execute('''
-        CREATE TABLE $tableName (
-          id INTEGER PRIMARY KEY,
-          ${columns.map((column) => '''
-            ${column['name']}
-            ${column['type']}
-            ${column['nullable'] == true ? "NULL" : "NOT NULL"}
-          ''').join(',')}
-        )
-      ''');
-  }
+  @override
+  List<Map<String, Object>> get columns => [
+        {
+          'name': 'description',
+          'type': 'TEXT',
+        },
+        {
+          'name': 'uom',
+          'type': 'TEXT',
+          'primaryKey': true,
+        },
+      ];
 
   Future<Iterable<Product>> getAll() async {
     final results = await database.query(tableName);
@@ -72,8 +61,4 @@ class ProductRepository {
 
     await database.delete(tableName, where: 'id = $id');
   }
-
-  String intValue(int? value) => value != null ? "$value" : 'null';
-
-  String textValue(String? value) => value != null ? "'$value'" : 'null';
 }

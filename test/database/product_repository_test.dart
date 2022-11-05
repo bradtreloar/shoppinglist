@@ -20,6 +20,8 @@ Future<Database> inMemoryDatabase() async {
 }
 
 Future main() async {
+  const tableName = 'products';
+
   setUpAll(() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
@@ -44,10 +46,10 @@ Future main() async {
     final productRepo = ProductRepository(database: database);
 
     await productRepo.insert(productAttributes1);
-    final result1 = await database.query(ProductRepository.tableName);
+    final result1 = await database.query(tableName);
 
     await productRepo.insert(productAttributes2);
-    final result2 = await database.query(ProductRepository.tableName);
+    final result2 = await database.query(tableName);
 
     expect(result1, [
       {
@@ -77,7 +79,7 @@ Future main() async {
 
     await productRepo.hydrate(products);
 
-    final result = await database.query(ProductRepository.tableName);
+    final result = await database.query(tableName);
     expect(result, products.map((product) => product.toMap()));
   });
 
@@ -173,7 +175,7 @@ Future main() async {
 
     await productRepo.delete(product.id);
 
-    final result = await database.query(ProductRepository.tableName);
+    final result = await database.query(tableName);
     expect(result, []);
   });
 
