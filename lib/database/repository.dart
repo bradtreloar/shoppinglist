@@ -1,7 +1,7 @@
 import 'package:shopping_list/models/model.dart';
 import 'package:sqflite/sqflite.dart';
 
-abstract class Repository<M extends Model> {
+abstract class Repository {
   final Database database;
 
   Repository({required this.database});
