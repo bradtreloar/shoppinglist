@@ -32,14 +32,18 @@ class ProductRepository extends Repository {
   }
 
   Future insert(Map<String, dynamic> attributes) async {
-    await database.insert(tableName, attributes);
+    final id = await database.insert(tableName, attributes);
+    return await getById(id);
   }
 
   Future hydrate(List<Product> products) async {
-    final values = products.map((product) =>
-        "(${intValue(product.id)}, ${textValue(product.description)}, ${textValue(product.uom)})");
-    await database.rawInsert(
-        'INSERT INTO $tableName(id, description, uom) VALUES${values.join(",")}');
+    await database.rawInsert("""
+        INSERT INTO $tableName(id, description, uom)
+        VALUES ${products.map((product) => """(
+          ${intValue(product.id)},
+          ${textValue(product.description)},
+          ${textValue(product.uom)}
+        )""").join(',')}""");
   }
 
   Future update(Product product) async {

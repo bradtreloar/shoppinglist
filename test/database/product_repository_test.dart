@@ -45,28 +45,25 @@ Future main() async {
     final productAttributes2 = fakeProductAttributes();
     final productRepo = ProductRepository(database: database);
 
-    await productRepo.insert(productAttributes1);
+    final product1 = await productRepo.insert(productAttributes1);
     final result1 = await database.query(tableName);
 
-    await productRepo.insert(productAttributes2);
+    final product2 = await productRepo.insert(productAttributes2);
     final result2 = await database.query(tableName);
 
-    expect(result1, [
-      {
-        'id': 1,
-        ...productAttributes1,
-      }
-    ]);
-    expect(result2, [
-      {
-        'id': 1,
-        ...productAttributes1,
-      },
-      {
-        'id': 2,
-        ...productAttributes2,
-      }
-    ]);
+    final expectedProduct1 = {
+      'id': 1,
+      ...productAttributes1,
+    };
+    final expectedProduct2 = {
+      'id': 2,
+      ...productAttributes2,
+    };
+
+    expect(product1.toMap(), expectedProduct1);
+    expect(product2.toMap(), expectedProduct2);
+    expect(result1, [expectedProduct1]);
+    expect(result2, [expectedProduct1, expectedProduct2]);
   });
 
   test('hydrates database with Products', () async {
