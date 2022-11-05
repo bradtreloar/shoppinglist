@@ -176,4 +176,29 @@ Future main() async {
       expect(e, isInstanceOf<NullIdException>());
     }
   });
+
+  test('deletes product by ID', () async {
+    final database = await inMemoryDatabase();
+    final product = fakeProduct();
+    await database.insert('products', product.toMap());
+    final productRepo = ProductRepository(database: database);
+
+    await productRepo.delete(product.id as int);
+
+    final result = await database.query(ProductRepository.tableName);
+    expect(result, []);
+  });
+
+  test('throws exception when deleting non-existent product', () async {
+    final database = await inMemoryDatabase();
+    const id = 1;
+    final productRepo = ProductRepository(database: database);
+
+    try {
+      await productRepo.delete(id);
+      fail("IdNotFoundException not thrown");
+    } catch (e) {
+      expect(e, isInstanceOf<IdNotFoundException>());
+    }
+  });
 }

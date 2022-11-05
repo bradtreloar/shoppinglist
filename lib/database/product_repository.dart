@@ -56,4 +56,13 @@ class ProductRepository {
     await database.update(tableName, product.toMap(),
         where: 'id = ${product.id}');
   }
+
+  Future delete(int id) async {
+    final results = await database.query(tableName, where: 'id = $id');
+    if (results.isEmpty) {
+      throw IdNotFoundException('Product', id);
+    }
+
+    await database.delete(tableName, where: 'id = $id');
+  }
 }
