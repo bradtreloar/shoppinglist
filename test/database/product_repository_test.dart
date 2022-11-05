@@ -27,18 +27,6 @@ Future main() async {
     databaseFactory = databaseFactoryFfi;
   });
 
-  test('creates Product table in database', () async {
-    final database = await openDatabase(inMemoryDatabasePath, version: 1);
-    final productRepo = ProductRepository(database: database);
-
-    await productRepo.createTable();
-
-    final result = await database.query('''
-      pragma_table_info('products')
-    ''');
-    expect(result.map((col) => col['name']), ['id', 'description', 'uom']);
-  });
-
   test('inserts new Product into database', () async {
     final database = await inMemoryDatabase();
     final productAttributes1 = fakeProductAttributes();
