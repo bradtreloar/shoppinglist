@@ -12,6 +12,9 @@ String randomUom() => faker.lorem.word();
 
 int randomQuantity(int min, int max) => min + Random().nextInt(max);
 
+List<Product> fakeProducts(int count) =>
+    List.generate(count, (int index) => fakeProduct());
+
 Product fakeProduct({int? id}) => Product.fromMap({
       'id': id ?? randomId(),
       ...fakeProductAttributes(),
