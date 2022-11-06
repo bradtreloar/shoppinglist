@@ -1,41 +1,11 @@
-import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shopping_list/database/exceptions.dart';
 import 'package:shopping_list/database/repository.dart';
-import 'package:shopping_list/models/model.dart';
 import 'package:shopping_list/types.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
 import '../fakes.dart';
-
-class TestModel extends Model {
-  final String textColumn;
-  final String? textColumnNullable;
-
-  TestModel({required id, required this.textColumn, this.textColumnNullable})
-      : super(id: id);
-
-  TestModel.fromMap(Map<String, dynamic> map)
-      : textColumn = map['textColumn'],
-        textColumnNullable = map['textColumnNullable'],
-        super(id: map['id']);
-
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'textColumn': textColumn,
-      'textColumnNullable': textColumnNullable,
-    };
-  }
-
-  @override
-  String toString() {
-    return textColumnNullable != null
-        ? '$runtimeType{$id: $textColumn, UOM: $textColumnNullable}'
-        : '$runtimeType{$id: $textColumn}';
-  }
-}
+import '../utils.dart';
 
 class TestModelRepository extends Repository<TestModel> {
   TestModelRepository(database) : super(database, TestModel.fromMap);
@@ -56,18 +26,6 @@ class TestModelRepository extends Repository<TestModel> {
         },
       ];
 }
-
-String randomTextColumnValue() => faker.lorem.word();
-
-TestModel fakeTestModel({int? id}) => TestModel.fromMap({
-      'id': id ?? randomId(),
-      ...fakeTestModelAttributes(),
-    });
-
-Map<String, dynamic> fakeTestModelAttributes() => {
-      'textColumn': randomTextColumnValue(),
-      'textColumnNullable': randomTextColumnValue(),
-    };
 
 Future<Database> inMemoryDatabase() async {
   return await openDatabase(inMemoryDatabasePath,

@@ -4,6 +4,8 @@ import 'package:shopping_list/models/product.dart';
 
 int randomId() => 1 + Random().nextInt(20000);
 
+String randomTextColumnValue() => faker.lorem.word();
+
 String randomDescription() => faker.lorem.word();
 
 String randomUom() => faker.lorem.word();
